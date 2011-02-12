@@ -1,0 +1,57 @@
+fc - files count
+Author: Florian Coulmier
+Date: 12 February 2011
+Version: 1.0-dev
+
+fc is a little utility that count files recursively in a directory.
+
+Usage
+=====
+
+Usage: fc [OPTIONS] DIR
+
+Options:
+  -d,--directories        Also count directories
+  -D,--only-directories   Count only number of directories
+  -L,--only-symlinks      Count only number of symbolic links
+  -F,--only-regular-files Count only number of regular files
+  -h,--help               Show this menu
+
+Efficacity
+==========
+
+Count number of files in a directory containing 10 copies of the
+2.6.37 linux kernel source.
+
+Performance with find and wc
+----------------------------
+
+% time find . -type f | wc -l
+  386924
+find . -type f  0,73s user 13,07s system 61% cpu 22,538 total
+
+Performance with du and wc
+--------------------------
+
+% time du | wc -l
+   23882
+du  0,72s user 13,54s system 61% cpu 23,018 total
+
+Performance with fc
+-------------------
+
+% time fc .
+386924
+fc .  0,39s user 3,54s system 28% cpu 13,677 total
+
+Todo
+====
+
+More options available: 
+  - do not cross filesystem
+  - do not count hard links
+
+Contact
+=======
+
+If you want to help this program, write me at florian @ coulmier . fr
