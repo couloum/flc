@@ -123,8 +123,20 @@ void usage() {
  */
 int main(int argc, char** argv) {
 	long nbfiles = 0;
-	int opt_help;
-	int i;
+	int option_index = 0; /* for getopt_long */
+	int opt_only_set = 0; /* Number of --only-* options passed */
+	int i, c; /* temp variables */
+	DIR* dir; /* temp variable, to check if passed dir exists */
+	/* Accepted arguments */
+	static struct option long_options[] =
+	{
+		{"help", no_argument, NULL, 'h'},
+		{"directories", no_argument, NULL, 'd'},
+		{"only-directories", no_argument, NULL, 'D'},
+		{"only-symlinks", no_argument, NULL, 'L'},
+		{"--only-regular-file", no_argument, NULL, 'F'},
+		{0, 0, 0, 0}
+	};
 
 	/* Initialize default arguments */
 	for(i = 0; i < 15; i++) {
@@ -133,21 +145,7 @@ int main(int argc, char** argv) {
 	/* DIR type is not counted by default */
 	global_args.counttype[DT_DIR] = 0;
 	
-	static struct option long_options[] =
-	{
-		{"help", no_argument, NULL, 'h'},
-		{"directories", no_argument, NULL, 'd'},
-		{"only-directories", no_argument, NULL, 'D'},
-//		{"no-symlinks", no_argument, NULL, 'l'},
-		{"only-symlinks", no_argument, NULL, 'L'},
-//		{"no-regular-file", no_argument, NULL, 'f'},
-		{"--only-regular-file", no_argument, NULL, 'F'},
-		{0, 0, 0, 0}
-	};
 
-	int option_index = 0;
-	int opt_only_set = 0;
-	int c;
 
 	/* Get options passed to the program */
 	while ((c = getopt_long(argc, argv, "hdDLF", long_options, &option_index)) != -1 )
@@ -194,7 +192,7 @@ int main(int argc, char** argv) {
 			   other type of files */
 			global_args.counttype[i] = (opt_only_set > 0 ? 0 : 1);
 		}
-//		printf("counttype[%d] = %d\n", i, global_args.counttype[i]);
+/*		printf("counttype[%d] = %d\n", i, global_args.counttype[i]); */
 	}
 
 
@@ -208,7 +206,6 @@ int main(int argc, char** argv) {
 	}
 
 	/* Check that given directory exists */
-	DIR* dir;
 	dir = opendir(argv[optind]);
 	if (! dir) {
 		fprintf(stderr, "`%s' does not exist or is not a directory.\n", argv[optind]);
