@@ -1,14 +1,34 @@
-fc - files count
+flc - files count
 Author: Florian Coulmier
 Date: 12 February 2011
 Version: 1.0-dev
 
-fc is a little utility that count files recursively in a directory.
+flc is a little utility that count files recursively in a directory.
+
+Dependencies
+============
+
+flc depends only on standards librairies that you should have.
+
+Installation
+============
+
+To compile flc, run:
+make
+
+Then, to install flc, run as root:
+make install
+
+flc will be installed in /usr/local/bin. If you want to change the 
+installation path, set the PREFIX variable to something before runing
+make install.
+Default PREFIX: /usr/local
+
 
 Usage
 =====
 
-Usage: fc [OPTIONS] DIR
+Usage: flc [OPTIONS] DIR
 
 Options:
   -d,--directories        Also count directories
@@ -37,12 +57,12 @@ Performance with du and wc
    23882
 du  0,72s user 13,54s system 61% cpu 23,018 total
 
-Performance with fc
+Performance with flc
 -------------------
 
-% time fc .
+% time flc .
 386924
-fc .  0,39s user 3,54s system 28% cpu 13,677 total
+flc .  0,39s user 3,54s system 28% cpu 13,677 total
 
 Todo
 ====
@@ -50,6 +70,8 @@ Todo
 More options available: 
   - do not cross filesystem
   - do not count hard links
+
+Write a manual
 
 Contact
 =======

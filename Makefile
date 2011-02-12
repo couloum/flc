@@ -1,9 +1,10 @@
 CC=gcc
 CFLAGS=-W -Wall -ansi -pedantic
 LDFLAGS=
-EXEC=fc
+EXEC=flc
 SRC=$(wildcard *.c)
 OBJ=$(SRC:.c=.o)
+PREFIX:=/usr/local
 
 all: $(EXEC)
 
@@ -16,3 +17,6 @@ fc: $(OBJ)
 clean:
 	rm -f $(EXEC) *.o
 
+install:
+	chmod 755 $(EXEC)
+	cp $(EXEC) $(PREFIX)/bin/
