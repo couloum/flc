@@ -29,8 +29,8 @@
  */
 
 #define PROG_NAME "flc"
-#define PROG_VERSION "1.0-dev"
-#define PROG_DATE "12 February 2011"
+#define PROG_VERSION "1.0"
+#define PROG_DATE "16 September 2011"
 #define PROG_AUTHOR "Florian Coulmier"
 #define PROG_AUTHORMAIL "florian@coulmier.fr"
 
@@ -91,7 +91,7 @@ long countfiles(char* path) {
 				}
 
 				/* Check that subdir full path is not too long */
-				if (strlen(path) + dc->d_namlen + 1 >= MAX_PATH_LENGTH) {
+				if (strlen(path) + dc->d_reclen + 1 >= MAX_PATH_LENGTH) {
 					fprintf(stderr, "Too long path: %s/%s\n", path, dc->d_name);
 					continue;
 				}

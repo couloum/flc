@@ -1,7 +1,7 @@
 flc - files count
 Author: Florian Coulmier
-Date: 12 February 2011
-Version: 1.0-dev
+Date: 16 Septembre 2011
+Version: 1.0
 
 flc is a little utility that count files recursively in a directory.
 
