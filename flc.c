@@ -156,7 +156,7 @@ int main(int argc, char** argv) {
 		{"only-directories", no_argument, NULL, 'D'},
 		{"only-symlinks", no_argument, NULL, 'L'},
 		{"only-regular-file", no_argument, NULL, 'F'},
-		{"no-recursive", no_argument, NULL, 'R'}
+		{"no-recursive", no_argument, NULL, 'R'},
 		{0, 0, 0, 0}
 	};
 
