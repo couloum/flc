@@ -29,8 +29,8 @@
  */
 
 #define PROG_NAME "flc"
-#define PROG_VERSION "1.0"
-#define PROG_DATE "16 September 2011"
+#define PROG_VERSION "1.1"
+#define PROG_DATE "26 January 2012"
 #define PROG_AUTHOR "Florian Coulmier"
 #define PROG_AUTHORMAIL "florian@coulmier.fr"
 
@@ -56,7 +56,7 @@ struct global_args_t {
  * For each sub-directory found, call itself again with the sub-directory
  * as argument.
  */
-long countfiles(char* path) {
+long countfiles(char* path, int recursive) {
 	DIR* dh; 
 	struct dirent *dc; 
 	long nbfiles = 0;
@@ -82,7 +82,7 @@ long countfiles(char* path) {
 		/* If file is a directory, call this function 
 		   recursively and add the result.
 		   Do not enter in '.' and '..'  */
-		if (dc->d_type == DT_DIR) {
+		if (dc->d_type == DT_DIR && recursive > 0) {
 			if (strncmp(dc->d_name, ".", 1) && strncmp(dc->d_name, "..", 2)) {
 
 				/* If we count directories, increase nbfiles */
@@ -96,7 +96,7 @@ long countfiles(char* path) {
 					continue;
 				}
 				snprintf(subdir, MAX_PATH_LENGTH, "%s/%s", path, dc->d_name);
-				nbsubfiles = countfiles(subdir);
+				nbsubfiles = countfiles(subdir, recursive);
 				/* if recursive call returned an error
 				   do not continue and return this error */
 				if (nbsubfiles < 0) {
@@ -126,6 +126,7 @@ void usage() {
 	printf("Usage: %s [OPTIONS] DIR\n", PROG_NAME);
 	printf("\n");
 	printf("Options:\n");
+	printf("  -R,--no-recursive       Do not traverse sub-directories\n");
 	printf("  -d,--directories        Also count directories\n");
 	printf("  -D,--only-directories   Count only number of directories\n");
 	printf("  -L,--only-symlinks      Count only number of symbolic links\n");
@@ -141,8 +142,10 @@ void usage() {
  */
 int main(int argc, char** argv) {
 	long nbfiles = 0;
-	int option_index = 0; /* for getopt_long */
-	int opt_only_set = 0; /* Number of --only-* options passed */
+	int opt_recursive = 1; /* Count files recursively */
+	int option_index = 0;  /* for getopt_long */
+	int opt_only_set = 0;  /* Number of --only-* options passed */
+	
 	int i, c; /* temp variables */
 	DIR* dir; /* temp variable, to check if passed dir exists */
 	/* Accepted arguments */
@@ -152,7 +155,8 @@ int main(int argc, char** argv) {
 		{"directories", no_argument, NULL, 'd'},
 		{"only-directories", no_argument, NULL, 'D'},
 		{"only-symlinks", no_argument, NULL, 'L'},
-		{"--only-regular-file", no_argument, NULL, 'F'},
+		{"only-regular-file", no_argument, NULL, 'F'},
+		{"no-recursive", no_argument, NULL, 'R'}
 		{0, 0, 0, 0}
 	};
 
@@ -166,7 +170,7 @@ int main(int argc, char** argv) {
 
 
 	/* Get options passed to the program */
-	while ((c = getopt_long(argc, argv, "hdDLF", long_options, &option_index)) != -1 )
+	while ((c = getopt_long(argc, argv, "hdDLFR", long_options, &option_index)) != -1 )
 	{
 		switch(c) {
 		case 'h':
@@ -186,6 +190,10 @@ int main(int argc, char** argv) {
 		case 'F':
 			global_args.counttype[DT_REG] = 1;
 			opt_only_set++;
+			break;
+		case 'R':
+			opt_recursive = 0;
+			break;
 		case '?':
 			/* This is an unkown option. getop_long already
 			   print an error message in this case */
@@ -233,7 +241,7 @@ int main(int argc, char** argv) {
 	}
 
 	/* Call countfiles function with the specified path */
-	nbfiles = countfiles(argv[optind]);
+	nbfiles = countfiles(argv[optind], opt_recursive);
 	
 	/* If nb of files is lether than 0, an error happened.
 	   Exit with an error code */
