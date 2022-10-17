@@ -1,5 +1,4 @@
 flc - files count
-Author: Florian Coulmier
 Date: 25 January 2012
 Version: 1.1
 
@@ -37,7 +36,7 @@ Options:
   -F,--only-regular-files Count only number of regular files
   -h,--help               Show this menu
 
-Efficacity
+Efficiency
 ==========
 
 Count number of files in a directory containing 10 copies of the
@@ -82,4 +81,4 @@ Please, read COPYING file for more information.
 Contact
 =======
 
-If you want to help this program, write me at florian @ coulmier . fr
+If you want to help this program, submit a PR, or write an issue.
